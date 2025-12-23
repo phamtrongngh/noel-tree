@@ -41,7 +41,7 @@ const AudioPlayer: React.FC = () => {
       <audio
         ref={audioRef}
         loop
-        src="/assets/music.mp3"
+        src="assets/music.mp3"
       />
     </div>
   );
