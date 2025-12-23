@@ -2,14 +2,13 @@
 import { ChristmasWish } from './types';
 
 export const WISHES: ChristmasWish[] = [
-  { id: 1,  to: "Nhi", message: "Chúc bé Nhi tuổi mới mau ăn chóng lớn, luôn xinh đẹp! 😝", color: "#c0392b" },
-  { id: 2,  to: "Nhi", message: "Chúc bé Nhi năm sau có gấu dắt tay đi chơi Noel! 🌲🎅", color: "#e84393" },
-  { id: 3,  to: "Nhi", message: "Chúc bé Nhi sang năm được tăng lương cao, lúc nào cũng dư tiền để sửa xe cho cả năm 🤣🤣", color: "#f1c40f" },
-  { id: 4,  to: "Nhi", message: "Chúc bé Nhi năm mới sẽ nấu nướng được nhiều món hơn cho mẹ (còn ăn được hay không thì tùy 😁)", color: "#27ae60" },
-  { id: 5,  to: "Nhi", message: "Chúc các em một kỳ nghỉ lễ thật vui tươi và chuẩn bị tốt cho những dự định sắp tới.", color: "#2980b9" },
-  { id: 6, to: "Nhi", message: "Ho ho ho! Chúc bạn luôn là một đứa trẻ ngoan và nhận được nhiều quà!", color: "#c0392b" },
-  { id: 7,  to: "Nhi", message: "Chúc chị yêu Giáng sinh rạng rỡ, xinh đẹp và sớm tìm được hoàng tử nhé!", color: "#8e44ad" },
-  { id: 8,  to: "Nhi", message: "Cả nhà mình cùng đón Noel thật đầm ấm con nhé. Luôn tự hào về con!", color: "#d35400" }
+  { id: 1,  to: "Nhi", message: "Chúc bé Nhi tuổi mới mau ăn chóng lớn, ngày càng xinh đẹp! 😝", color: "#c0392b" },
+  { id: 2,  to: "Nhi", message: "Chúc Nhi năm sau kiếm được anh người yêu dắt đi chơi Noel, không còn một mình! 🌲🎅", color: "#e84393" },
+  { id: 3,  to: "Nhi", message: "Chúc Nhi được tăng lương, tiền đầy túi, dư sức để sửa xe 🤣🤣", color: "#f1c40f" },
+  { id: 4,  to: "Nhi", message: "Chúc Nhi năm mới sẽ nấu được nhiều món hơn cho Mama (còn ăn được hay không thì tùy 😁)", color: "#27ae60" },
+  { id: 5,  to: "Nhi", message: "Chúc Nhi năm sau có nhiều thời gian rảnh để du lịch khắp nơi! 🤗 🚅 🚋", color: "#2980b9" },
+  { id: 6, to: "Nhi", message: "Chúc Nhi và Gia Đình luôn có nhiều sức khỏe và hạnh phúc! 🥰 🥰", color: "#c0392b" },
+  { id: 10,  to: "Nghĩa", message: "Chúc Nghĩa có nhiều cơ hội được rủ Nhi đi chơi! 😛😛", color: "#d35400" }
 ];
 
 export const COLORS = {
