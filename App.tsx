@@ -4,6 +4,7 @@ import { OrbitControls, PerspectiveCamera, Environment, Stars, MeshReflectorMate
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import ChristmasTree from './components/ChristmasTree';
 import Snowfall from './components/Snowfall';
+import WoodenHouse from './components/WoodenHouse';
 import WishModal from './components/WishModal';
 import AudioPlayer from './components/AudioPlayer';
 import { ChristmasWish } from './types';
@@ -98,6 +99,9 @@ const App: React.FC = () => {
 
           <group position={[0, 0.5, 0]}>
             <ChristmasTree onCardClick={handleCardClick} readWishIds={readWishIds} />
+
+            {/* Wooden House behind the tree */}
+            <WoodenHouse position={[0, -4.0, -9]} />
 
             {/* Snowy Plane Ground */}
             <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -4.0, 0]} receiveShadow>
