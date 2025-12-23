@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { ChristmasWish } from '../types';
-import { X, Gift } from 'lucide-react';
 
 interface WishModalProps {
   wish: ChristmasWish | null;
@@ -12,46 +11,78 @@ const WishModal: React.FC<WishModalProps> = ({ wish, onClose }) => {
   if (!wish) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-in fade-in duration-300">
       <div
-        className="relative w-full max-w-md bg-white rounded-3xl overflow-hidden shadow-2xl transform animate-in zoom-in slide-in-from-bottom-10 duration-500"
-        style={{ borderTop: `8px solid ${wish.color}` }}
+        className="relative w-full max-w-lg bg-[#a81616] rounded-[2rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border-4 border-[#d4af37]/30 transform animate-in zoom-in slide-in-from-bottom-10 duration-500 flex flex-col items-center p-8 text-white group"
       >
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 transition-colors"
-        >
-          <X className="w-6 h-6 text-gray-500" />
-        </button>
+        {/* Gold Border Accent */}
+        <div className="absolute inset-2 border border-[#d4af37]/20 rounded-[1.5rem] pointer-events-none" />
 
-        <div className="p-8 flex flex-col items-center text-center">
-          <div
-            className="w-16 h-16 rounded-full flex items-center justify-center mb-6"
-            style={{ backgroundColor: `${wish.color}20` }}
-          >
-            <Gift className="w-8 h-8" style={{ color: wish.color }} />
-          </div>
+        {/* Illustrations from assets (assuming 2x2 grid) */}
+        <div className="absolute top-4 left-4 w-20 h-20 overflow-hidden rounded-full border-2 border-white/20 shadow-lg group-hover:scale-110 transition-transform duration-500">
+          <img
+            src="/assets/christmas_assets.png"
+            className="w-[200%] max-w-none absolute"
+            style={{ left: '0%', top: '0%' }}
+          />
+        </div>
 
-          <h3 className="text-xl font-bold text-gray-800 mb-2">Lời chúc từ {wish.from}</h3>
+        <div className="absolute top-4 right-4 w-20 h-20 overflow-hidden rounded-full border-2 border-white/20 shadow-lg group-hover:scale-110 transition-transform duration-500">
+          <img
+            src="/assets/christmas_assets.png"
+            className="w-[200%] max-w-none absolute"
+            style={{ left: '-100%', top: '0%' }}
+          />
+        </div>
 
-          <div className="my-6 relative">
-            <span className="text-5xl absolute -top-4 -left-6 opacity-20 text-gray-400">"</span>
-            <p className="text-lg text-gray-700 italic font-christmas leading-relaxed px-4">
+        <div className="absolute bottom-4 left-4 w-20 h-20 overflow-hidden rounded-full border-2 border-white/20 shadow-lg group-hover:scale-110 transition-transform duration-500">
+          <img
+            src="/assets/christmas_assets.png"
+            className="w-[200%] max-w-none absolute"
+            style={{ left: '0%', top: '-100%' }}
+          />
+        </div>
+
+        <div className="absolute bottom-4 right-4 w-20 h-20 overflow-hidden rounded-full border-2 border-white/20 shadow-lg group-hover:scale-110 transition-transform duration-500">
+          <img
+            src="/assets/christmas_assets.png"
+            className="w-[200%] max-w-none absolute"
+            style={{ left: '-100%', top: '-100%' }}
+          />
+        </div>
+
+        {/* Content */}
+        <div className="relative z-10 flex flex-col items-center">
+          <p className="text-[#d4af37] font-medium tracking-widest uppercase text-sm mb-2 opacity-80">We wish you a</p>
+          <h2 className="text-6xl font-merry text-[#f8e4a0] mb-8 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">Merry Christmas</h2>
+
+          <div className="w-16 h-1 w-[#d4af37]/40 mb-8 rounded-full" />
+
+          <div className="bg-white/10 backdrop-blur-sm p-8 rounded-2xl border border-white/10 max-w-sm mb-8 relative">
+            <span className="text-4xl absolute -top-4 -left-2 text-[#d4af37] font-serif">"</span>
+            <p className="text-xl font-serif-body italic leading-relaxed text-center px-4">
               {wish.message}
             </p>
-            <span className="text-5xl absolute -bottom-8 -right-4 opacity-20 text-gray-400">"</span>
+            <span className="text-4xl absolute -bottom-8 -right-2 text-[#d4af37] font-serif">"</span>
+          </div>
+
+          <div className="text-center mb-10">
+            <p className="text-[#d4af37] font-medium tracking-wide mb-1 opacity-70">Lời chúc từ</p>
+            <h3 className="text-3xl font-christmas text-[#f8e4a0]">{wish.from}</h3>
           </div>
 
           <button
             onClick={onClose}
-            className="mt-8 px-8 py-3 rounded-full text-white font-semibold shadow-lg hover:brightness-110 active:scale-95 transition-all"
-            style={{ backgroundColor: wish.color }}
+            className="group relative px-10 py-3 bg-[#d4af37] hover:bg-[#f8e4a0] text-[#701010] font-bold rounded-full transition-all duration-300 shadow-[0_5px_15px_rgba(0,0,0,0.3)] active:scale-95"
           >
-            Đóng
+            Đóng Lại
+            <div className="absolute inset-0 rounded-full border-2 border-white/20 animate-ping opacity-0 group-hover:opacity-100" />
           </button>
         </div>
 
-        <div className="h-2 w-full bg-gradient-to-r from-transparent via-gray-200 to-transparent opacity-30" />
+        {/* Decorative corner elements */}
+        <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 -rotate-45 translate-x-16 -translate-y-16" />
+        <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/5 -rotate-45 -translate-x-16 translate-y-16" />
       </div>
     </div>
   );
