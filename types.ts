@@ -5,6 +5,7 @@ export interface ChristmasWish {
   to: string;
   message: string;
   color: string;
+  isRead?: boolean;
 }
 
 export interface CardProps {
@@ -12,4 +13,5 @@ export interface CardProps {
   position: [number, number, number];
   rotation: [number, number, number];
   onClick: (wish: ChristmasWish) => void;
+  isRead?: boolean;
 }

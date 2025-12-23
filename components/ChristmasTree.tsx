@@ -8,9 +8,10 @@ import TreeCard from './TreeCard';
 
 interface ChristmasTreeProps {
   onCardClick: (wish: ChristmasWish) => void;
+  readWishIds: Set<number>;
 }
 
-const ChristmasTree: React.FC<ChristmasTreeProps> = ({ onCardClick }) => {
+const ChristmasTree: React.FC<ChristmasTreeProps> = ({ onCardClick, readWishIds }) => {
   // --- Procedural Branch Generation ---
   const branchesData = useMemo(() => {
     const data = [];
@@ -274,6 +275,7 @@ const ChristmasTree: React.FC<ChristmasTreeProps> = ({ onCardClick }) => {
           position={card.position}
           rotation={card.rotation}
           onClick={onCardClick}
+          isRead={readWishIds.has(card.wish.id)}
         />
       ))}
 

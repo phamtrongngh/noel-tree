@@ -5,7 +5,7 @@ import { useFrame } from '@react-three/fiber';
 import { Text, Float, RoundedBox, useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 
-const TreeCard: React.FC<CardProps> = ({ wish, position, rotation, onClick }) => {
+const TreeCard: React.FC<CardProps> = ({ wish, position, rotation, onClick, isRead }) => {
   const [hovered, setHovered] = useState(false);
   const groupRef = useRef<THREE.Group>(null);
   const materialRef = useRef<THREE.MeshStandardMaterial>(null);
@@ -31,13 +31,7 @@ const TreeCard: React.FC<CardProps> = ({ wish, position, rotation, onClick }) =>
         // 2. Scale: Grow larger
         groupRef.current.scale.lerp(new THREE.Vector3(3.5, 3.5, 3.5), 0.08);
 
-        // 3. Rotation: Orient to face camera
-        const lookAtMatrix = new THREE.Matrix4();
-        // We look from current position towards camera position
-        lookAtMatrix.lookAt(groupRef.current.position, cameraLocalPos, new THREE.Vector3(0, 1, 0));
-        const targetQuat = new THREE.Quaternion().setFromRotationMatrix(lookAtMatrix);
-        groupRef.current.quaternion.slerp(targetQuat, 0.1);
-
+        // No rotation change during opening - keep the original orientation
       } else {
         // Reset when not opening
         groupRef.current.position.lerp(new THREE.Vector3(0, 0, 0), 0.1);
@@ -51,11 +45,16 @@ const TreeCard: React.FC<CardProps> = ({ wish, position, rotation, onClick }) =>
     }
     if (materialRef.current) {
       if (!hovered && !opening) {
-        // Faster and brighter blinking
-        const pulse = (Math.sin(state.clock.elapsedTime * 5) + 1) / 2;
-        materialRef.current.emissiveIntensity = 0.5 + pulse * 2.5;
+        if (isRead) {
+          // Dim and static when read
+          materialRef.current.emissiveIntensity = 0.1;
+        } else {
+          // Faster and brighter blinking for unread cards
+          const pulse = (Math.sin(state.clock.elapsedTime * 5) + 1) / 2;
+          materialRef.current.emissiveIntensity = 0.5 + pulse * 2.5;
+        }
       } else if (hovered && !opening) {
-        materialRef.current.emissiveIntensity = 4.0;
+        materialRef.current.emissiveIntensity = isRead ? 1.0 : 4.0;
       } else if (opening) {
         materialRef.current.emissiveIntensity = 10.0; // Glow intense when flying
       }
@@ -88,69 +87,77 @@ const TreeCard: React.FC<CardProps> = ({ wish, position, rotation, onClick }) =>
           {/* Card Body */}
           <group scale={hovered && !opening ? 1.2 : 1}>
             {/* Main Card */}
-            <RoundedBox args={[0.5, 0.5, 0.04]} radius={0.03} smoothness={4}>
+            <RoundedBox args={[0.4, 0.7, 0.04]} radius={0.02} smoothness={4}>
               <meshStandardMaterial
                 ref={materialRef}
-                color="#a81616"
-                roughness={0.2}
+                color={isRead ? "#5a1a1a" : "#a81616"}
+                roughness={isRead ? 0.8 : 0.2}
                 metalness={0.1}
-                emissive="#ff0000"
+                emissive={isRead ? "#220000" : "#ff0000"}
                 emissiveIntensity={0.5}
+                transparent={true}
+                opacity={isRead ? 0.7 : 1}
                 toneMapped={false}
               />
             </RoundedBox>
 
-            {/* Gold Frame */}
+            {/* Thinner Gold Frame */}
             <mesh position={[0, 0, 0.001]}>
-              <boxGeometry args={[0.52, 0.52, 0.035]} />
+              <boxGeometry args={[0.41, 0.71, 0.035]} />
               <meshStandardMaterial
-                color="#d4af37"
-                metalness={0.8}
+                color={isRead ? "#6b5921" : "#d4af37"}
+                metalness={isRead ? 0.3 : 0.8}
                 roughness={0.2}
-                emissive="#d4af37"
-                emissiveIntensity={0.5}
+                emissive={isRead ? "#332a00" : "#d4af37"}
+                emissiveIntensity={isRead ? 0.1 : 0.5}
+                transparent={true}
+                opacity={isRead ? 0.7 : 1}
                 toneMapped={false}
               />
             </mesh>
 
             {/* Recipient Text */}
             <Text
-              position={[0, -0.12, 0.03]}
+              position={[0, -0.22, 0.03]}
               fontSize={0.06}
-              color="#f8e4a0"
+              color={isRead ? "#8a7e5a" : "#f8e4a0"}
               font="https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/greatvibes/GreatVibes-Regular.ttf"
               anchorX="center"
               anchorY="middle"
-              maxWidth={0.4}
+              maxWidth={0.35}
               textAlign="center"
+              fillOpacity={isRead ? 0.6 : 1}
             >
               {wish.to}
             </Text>
 
             {/* Merry Xmas Text */}
             <Text
-              position={[0, 0.1, 0.03]}
+              position={[0, 0.22, 0.03]}
               fontSize={0.04}
-              color="#d4af37"
+              color={isRead ? "#6b5921" : "#d4af37"}
               font="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hjp-Ek-_EeA.woff"
               anchorX="center"
               anchorY="middle"
-              maxWidth={0.4}
+              maxWidth={0.35}
               textAlign="center"
               letterSpacing={0.1}
+              fillOpacity={isRead ? 0.6 : 1}
             >
               MERRY XMAS
             </Text>
 
-            {/* Central Ornament (Golden Sphere) */}
+            {/* Central Ornament (Golden Sphere) - Slightly smaller */}
             <mesh position={[0, 0, 0.03]}>
-              <sphereGeometry args={[0.05, 32, 32]} />
+              <sphereGeometry args={[0.04, 32, 32]} />
               <meshStandardMaterial
-                color="#d4af37"
-                metalness={1}
+                color={isRead ? "#6b5921" : "#d4af37"}
+                metalness={isRead ? 0.4 : 1}
                 roughness={0}
-                emissive="#d4af37"
-                emissiveIntensity={1.0}
+                emissive={isRead ? "#332a00" : "#d4af37"}
+                emissiveIntensity={isRead ? 0.2 : 1.0}
+                transparent={true}
+                opacity={isRead ? 0.7 : 1}
                 toneMapped={false}
               />
             </mesh>
@@ -158,7 +165,7 @@ const TreeCard: React.FC<CardProps> = ({ wish, position, rotation, onClick }) =>
 
           {/* Light glow on hover */}
           {(hovered || opening) && (
-            <pointLight distance={2} intensity={opening ? 20 : 10} color="#d4af37" />
+            <pointLight distance={2} intensity={opening ? 20 : (isRead ? 3 : 10)} color="#d4af37" />
           )}
         </group>
       </Float>

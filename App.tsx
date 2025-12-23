@@ -11,9 +11,11 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const App: React.FC = () => {
   const [selectedWish, setSelectedWish] = useState<ChristmasWish | null>(null);
+  const [readWishIds, setReadWishIds] = useState<Set<number>>(new Set());
 
   const handleCardClick = (wish: ChristmasWish) => {
     setSelectedWish(wish);
+    setReadWishIds(prev => new Set(prev).add(wish.id));
   };
 
   return (
@@ -95,7 +97,7 @@ const App: React.FC = () => {
           <fog attach="fog" args={['#0b1026', 8, 35]} />
 
           <group position={[0, 0.5, 0]}>
-            <ChristmasTree onCardClick={handleCardClick} />
+            <ChristmasTree onCardClick={handleCardClick} readWishIds={readWishIds} />
 
             {/* Snowy Plane Ground */}
             <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -4.0, 0]} receiveShadow>

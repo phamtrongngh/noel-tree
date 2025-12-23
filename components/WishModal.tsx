@@ -79,7 +79,7 @@ const WishModal: React.FC<WishModalProps> = ({ wish, onClose }) => {
             onClick={onClose}
             className="group relative px-10 py-3 bg-[#d4af37] hover:bg-[#f8e4a0] text-[#701010] font-bold rounded-full transition-all duration-300 shadow-[0_5px_15px_rgba(0,0,0,0.3)] active:scale-95"
           >
-            Đóng Lại
+            Đóng
             <div className="absolute inset-0 rounded-full border-2 border-white/20 animate-ping opacity-0 group-hover:opacity-100" />
           </button>
         </div>
