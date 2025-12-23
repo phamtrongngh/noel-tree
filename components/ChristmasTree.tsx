@@ -88,6 +88,33 @@ const ChristmasTree: React.FC<ChristmasTreeProps> = ({ onCardClick }) => {
     });
   }, []);
 
+  // --- Gifts Logic ---
+  const gifts = useMemo(() => {
+    const giftCount = 12;
+    const colors = ['#e74c3c', '#2ecc71', '#3498db', '#f1c40f', '#9b59b6', '#ecf0f1', '#d35400', '#1abc9c'];
+    const data = [];
+    for (let i = 0; i < giftCount; i++) {
+      const angle = (i / giftCount) * Math.PI * 2 + (Math.random() - 0.5) * 0.5;
+      const radius = 1.0 + Math.random() * 1.5;
+      const x = Math.cos(angle) * radius;
+      const z = Math.sin(angle) * radius;
+      const size = 0.3 + Math.random() * 0.3;
+
+      // Position y: The floor corresponds to -3.0 relative to this group (since Ground is -4.0 in App, and Tree is -1.0).
+      // Box center y = -3.0 + size/2
+      const y = -3.0 + size / 2;
+
+      data.push({
+        position: [x, y, z] as [number, number, number],
+        rotation: [0, Math.random() * Math.PI, 0] as [number, number, number],
+        size,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        ribbonColor: Math.random() > 0.5 ? '#ffffff' : '#f1c40f'
+      });
+    }
+    return data;
+  }, []);
+
   return (
     <group position={[0, -1, 0]}>
       {/* --- The Tree Trunk --- */}
@@ -124,6 +151,41 @@ const ChristmasTree: React.FC<ChristmasTreeProps> = ({ onCardClick }) => {
           <meshStandardMaterial color="#1a1a1a" roughness={0.2} metalness={0.6} />
         </Cylinder>
       </group>
+
+      {/* --- Gift Boxes --- */}
+      {gifts.map((gift, i) => (
+        <group key={`gift-${i}`} position={gift.position} rotation={gift.rotation}>
+          {/* Main Box */}
+          <mesh castShadow receiveShadow>
+            <boxGeometry args={[gift.size, gift.size, gift.size]} />
+            <meshStandardMaterial color={gift.color} roughness={0.3} />
+          </mesh>
+
+          {/* Ribbons */}
+          {/* Vertical Loop 1 */}
+          <mesh>
+            <boxGeometry args={[gift.size * 1.02, gift.size + 0.01, gift.size * 0.2]} />
+            <meshStandardMaterial color={gift.ribbonColor} />
+          </mesh>
+          {/* Vertical Loop 2 */}
+          <mesh>
+            <boxGeometry args={[gift.size * 0.2, gift.size + 0.01, gift.size * 1.02]} />
+            <meshStandardMaterial color={gift.ribbonColor} />
+          </mesh>
+
+          {/* Bow on top */}
+          <group position={[0, gift.size / 2, 0]} rotation={[0, Math.PI / 4, 0]}>
+            <mesh position={[0, 0.05, 0]}>
+              <boxGeometry args={[gift.size * 0.4, 0.05, gift.size * 0.4]} />
+              <meshStandardMaterial color={gift.ribbonColor} />
+            </mesh>
+            <mesh position={[0, 0.1, 0]} rotation={[0, 0, Math.PI / 4]}>
+              <boxGeometry args={[gift.size * 0.15, gift.size * 0.15, gift.size * 0.15]} />
+              <meshStandardMaterial color={gift.ribbonColor} />
+            </mesh>
+          </group>
+        </group>
+      ))}
 
       {/* --- Glowing Ornaments --- */}
       {ornaments.map((orn, i) => (

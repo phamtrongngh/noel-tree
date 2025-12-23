@@ -97,10 +97,9 @@ const App: React.FC = () => {
           <group position={[0, 0.5, 0]}>
             <ChristmasTree onCardClick={handleCardClick} />
 
-            {/* Snowy Hill Ground */}
-            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -4.2, 0]} receiveShadow>
-              {/* Large curve for hill effect */}
-              <sphereGeometry args={[25, 64, 64, 0, Math.PI * 2, 0, Math.PI * 0.15]} />
+            {/* Snowy Plane Ground */}
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -4.0, 0]} receiveShadow>
+              <circleGeometry args={[40, 32]} />
               <meshStandardMaterial
                 color="#f8fafc"
                 roughness={0.9}
