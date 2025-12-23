@@ -7,25 +7,46 @@ const AudioPlayer: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
+    const playAudio = () => {
+      if (audioRef.current && !isPlaying) {
+        audioRef.current.play()
+          .then(() => {
+            setIsPlaying(true);
+            removeListeners();
+          })
+          .catch(e => {
+            console.log("Play failed, waiting for interaction:", e);
+          });
+      }
+    };
+
+    const removeListeners = () => {
+      window.removeEventListener('click', playAudio);
+      window.removeEventListener('touchstart', playAudio);
+      window.removeEventListener('keydown', playAudio);
+    };
+
     // Attempt to auto-play on mount
-    if (audioRef.current) {
-      audioRef.current.play()
-        .then(() => setIsPlaying(true))
-        .catch(e => {
-          console.log("Auto-play blocked by browser. User interaction required.", e);
-          setIsPlaying(false);
-        });
-    }
-  }, []);
+    playAudio();
+
+    // Add listeners for interaction
+    window.addEventListener('click', playAudio);
+    window.addEventListener('touchstart', playAudio);
+    window.addEventListener('keydown', playAudio);
+
+    return () => removeListeners();
+  }, [isPlaying]);
 
   const togglePlay = () => {
     if (audioRef.current) {
       if (isPlaying) {
         audioRef.current.pause();
+        setIsPlaying(false);
       } else {
-        audioRef.current.play().catch(e => console.log("Audio play blocked", e));
+        audioRef.current.play()
+          .then(() => setIsPlaying(true))
+          .catch(e => console.log("Audio play blocked", e));
       }
-      setIsPlaying(!isPlaying);
     }
   };
 

@@ -14,6 +14,7 @@ import ChristmasTrain from './components/ChristmasTrain';
 const App: React.FC = () => {
   const [selectedWish, setSelectedWish] = useState<ChristmasWish | null>(null);
   const [readWishIds, setReadWishIds] = useState<Set<number>>(new Set());
+  const [started, setStarted] = useState(false);
 
   const handleCardClick = (wish: ChristmasWish) => {
     setSelectedWish(wish);
@@ -24,13 +25,6 @@ const App: React.FC = () => {
     <div className="relative w-full h-screen overflow-hidden bg-[#0b1026]">
       {/* Background Gradient - Winter Night */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#1e2a4a] via-[#0b1026] to-[#000000] z-0 pointer-events-none" />
-
-      {/* UI Overlay - Top */}
-      <div className="absolute top-8 left-0 right-0 md:left-8 md:text-left text-center z-40 pointer-events-none select-none px-4">
-        <h1 className="text-transparent bg-clip-text bg-gradient-to-r from-blue-100 via-white to-blue-200 text-4xl md:text-7xl font-christmas drop-shadow-[0_0_25px_rgba(255,255,255,0.6)]">
-          Merry Christmas
-        </h1>
-      </div>
 
       {/* Rotation Guides - Sides */}
       <div className="absolute inset-y-0 left-4 flex items-center z-40 pointer-events-none">
@@ -154,6 +148,23 @@ const App: React.FC = () => {
         onClose={() => setSelectedWish(null)}
       />
       <AudioPlayer />
+
+      {/* Start Overlay */}
+      {!started && (
+        <div
+          className="absolute inset-0 z-[100] flex flex-col items-center justify-center bg-[#0b1026]/80 backdrop-blur-md cursor-pointer transition-opacity duration-1000"
+          onClick={() => setStarted(true)}
+        >
+          <div className="text-center animate-pulse">
+            <h2 className="text-white text-3xl md:text-5xl font-christmas mb-4 drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
+              Chúc Nhi Giáng sinh vui vẻ
+            </h2>
+            <p className="text-blue-200/70 uppercase tracking-[0.3em] text-xs">
+              Chạm để bắt đầu
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
