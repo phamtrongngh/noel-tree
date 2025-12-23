@@ -22,8 +22,8 @@ const App: React.FC = () => {
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#1e2a4a] via-[#0b1026] to-[#000000] z-0 pointer-events-none" />
 
       {/* UI Overlay - Top */}
-      <div className="absolute top-8 left-8 z-40 pointer-events-none select-none">
-        <h1 className="text-transparent bg-clip-text bg-gradient-to-r from-blue-100 via-white to-blue-200 text-5xl md:text-7xl font-christmas drop-shadow-[0_0_25px_rgba(255,255,255,0.6)]">
+      <div className="absolute top-8 left-0 right-0 md:left-8 md:text-left text-center z-40 pointer-events-none select-none px-4">
+        <h1 className="text-transparent bg-clip-text bg-gradient-to-r from-blue-100 via-white to-blue-200 text-4xl md:text-7xl font-christmas drop-shadow-[0_0_25px_rgba(255,255,255,0.6)]">
           Merry Christmas
         </h1>
       </div>

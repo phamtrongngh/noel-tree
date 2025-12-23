@@ -223,13 +223,6 @@ const ChristmasTree: React.FC<ChristmasTreeProps> = ({ onCardClick }) => {
       {/* --- Glowing Ornaments --- */}
       {ornaments.map((orn, i) => (
         <group key={`orn-${i}`} position={orn.position}>
-          {/* String tilted back into the tree foliage */}
-          <group rotation={[0, -orn.angle + Math.PI / 2, 0]}>
-            <mesh position={[0, 0.15, -0.1]} rotation={[0.4, 0, 0]}>
-              <cylinderGeometry args={[0.005, 0.005, 0.4]} />
-              <meshBasicMaterial color="#aaa" />
-            </mesh>
-          </group>
           <mesh position={[0, 0, 0]}>
             <sphereGeometry args={[orn.scale, 32, 32]} />
             <meshStandardMaterial

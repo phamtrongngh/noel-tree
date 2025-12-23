@@ -11,9 +11,13 @@ const WishModal: React.FC<WishModalProps> = ({ wish, onClose }) => {
   if (!wish) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-in fade-in duration-300">
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-in fade-in duration-300 cursor-pointer"
+      onClick={onClose}
+    >
       <div
-        className="relative w-full max-w-lg bg-[#a81616] rounded-[2rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border-4 border-[#d4af37]/30 transform animate-in zoom-in slide-in-from-bottom-10 duration-500 flex flex-col items-center p-8 text-white group"
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-lg bg-[#a81616] rounded-[2rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border-4 border-[#d4af37]/30 transform animate-in zoom-in slide-in-from-bottom-10 duration-500 flex flex-col items-center p-6 md:p-8 text-white group cursor-default"
       >
         {/* Gold Border Accent */}
         <div className="absolute inset-2 border border-[#d4af37]/20 rounded-[1.5rem] pointer-events-none" />
@@ -52,9 +56,9 @@ const WishModal: React.FC<WishModalProps> = ({ wish, onClose }) => {
         </div>
 
         {/* Content */}
-        <div className="relative z-10 flex flex-col items-center">
-          <p className="text-[#d4af37] font-medium tracking-widest uppercase text-sm mb-2 opacity-80">We wish you a</p>
-          <h2 className="text-6xl font-merry text-[#f8e4a0] mb-8 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">Merry Christmas</h2>
+        <div className="relative z-10 flex flex-col items-center text-center">
+          <p className="text-[#d4af37] font-medium tracking-widest uppercase text-xs md:text-sm mb-2 opacity-80">We wish you a</p>
+          <h2 className="text-4xl md:text-6xl font-merry text-[#f8e4a0] mb-6 md:mb-8 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] leading-tight">Merry Christmas</h2>
 
           <div className="w-16 h-1 w-[#d4af37]/40 mb-8 rounded-full" />
 
@@ -67,8 +71,8 @@ const WishModal: React.FC<WishModalProps> = ({ wish, onClose }) => {
           </div>
 
           <div className="text-center mb-10">
-            <p className="text-[#d4af37] font-medium tracking-wide mb-1 opacity-70">Lời chúc từ</p>
-            <h3 className="text-3xl font-christmas text-[#f8e4a0]">{wish.from}</h3>
+            <p className="text-[#d4af37] font-medium tracking-wide mb-1 opacity-70">Thân gửi đến</p>
+            <h3 className="text-3xl font-christmas text-[#f8e4a0]">{wish.to}</h3>
           </div>
 
           <button
