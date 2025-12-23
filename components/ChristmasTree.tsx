@@ -90,18 +90,28 @@ const ChristmasTree: React.FC<ChristmasTreeProps> = ({ onCardClick }) => {
 
   // --- Gifts Logic ---
   const gifts = useMemo(() => {
-    const giftCount = 12;
-    const colors = ['#e74c3c', '#2ecc71', '#3498db', '#f1c40f', '#9b59b6', '#ecf0f1', '#d35400', '#1abc9c'];
+    const giftCount = 45; // More gifts
+    const colors = [
+      '#e74c3c', '#c0392b', // Reds
+      '#2ecc71', '#27ae60', // Greens
+      '#3498db', '#2980b9', // Blues
+      '#f1c40f', '#f39c12', // Golds/Yellows
+      '#9b59b6', '#8e44ad', // Purples
+      '#ecf0f1', '#bdc3c7', // Silvers/Whites
+      '#e67e22', '#d35400', // Oranges
+      '#1abc9c', '#16a085'  // Teals
+    ];
     const data = [];
     for (let i = 0; i < giftCount; i++) {
-      const angle = (i / giftCount) * Math.PI * 2 + (Math.random() - 0.5) * 0.5;
-      const radius = 1.0 + Math.random() * 1.5;
+      const angle = (i / giftCount) * Math.PI * 2 + (Math.random() - 0.5) * 0.4;
+      // Foliage radius at bottom is ~2.5. We spread them from tucked under (1.8) to outside (4.5)
+      const radius = 1.8 + Math.random() * 2.7;
       const x = Math.cos(angle) * radius;
       const z = Math.sin(angle) * radius;
-      const size = 0.3 + Math.random() * 0.3;
+      // Larger size range
+      const size = 0.4 + Math.random() * 0.55;
 
-      // Position y: The floor corresponds to -3.0 relative to this group (since Ground is -4.0 in App, and Tree is -1.0).
-      // Box center y = -3.0 + size/2
+      // Position y: The floor corresponds to -3.0 relative to this group.
       const y = -3.0 + size / 2;
 
       data.push({
@@ -109,7 +119,8 @@ const ChristmasTree: React.FC<ChristmasTreeProps> = ({ onCardClick }) => {
         rotation: [0, Math.random() * Math.PI, 0] as [number, number, number],
         size,
         color: colors[Math.floor(Math.random() * colors.length)],
-        ribbonColor: Math.random() > 0.5 ? '#ffffff' : '#f1c40f'
+        ribbonColor: Math.random() > 0.4 ? '#ffffff' : '#f1c40f', // White or Gold
+        emissiveIntensity: 0.1 + Math.random() * 0.2
       });
     }
     return data;
@@ -158,30 +169,52 @@ const ChristmasTree: React.FC<ChristmasTreeProps> = ({ onCardClick }) => {
           {/* Main Box */}
           <mesh castShadow receiveShadow>
             <boxGeometry args={[gift.size, gift.size, gift.size]} />
-            <meshStandardMaterial color={gift.color} roughness={0.3} />
+            <meshStandardMaterial
+              color={gift.color}
+              roughness={0.2}
+              metalness={0.1}
+              emissive={gift.color}
+              emissiveIntensity={gift.emissiveIntensity}
+            />
           </mesh>
 
           {/* Ribbons */}
           {/* Vertical Loop 1 */}
           <mesh>
-            <boxGeometry args={[gift.size * 1.02, gift.size + 0.01, gift.size * 0.2]} />
-            <meshStandardMaterial color={gift.ribbonColor} />
+            <boxGeometry args={[gift.size * 1.02, gift.size + 0.01, gift.size * 0.18]} />
+            <meshStandardMaterial
+              color={gift.ribbonColor}
+              emissive={gift.ribbonColor}
+              emissiveIntensity={0.2}
+            />
           </mesh>
           {/* Vertical Loop 2 */}
           <mesh>
-            <boxGeometry args={[gift.size * 0.2, gift.size + 0.01, gift.size * 1.02]} />
-            <meshStandardMaterial color={gift.ribbonColor} />
+            <boxGeometry args={[gift.size * 0.18, gift.size + 0.01, gift.size * 1.02]} />
+            <meshStandardMaterial
+              color={gift.ribbonColor}
+              emissive={gift.ribbonColor}
+              emissiveIntensity={0.2}
+            />
           </mesh>
 
           {/* Bow on top */}
           <group position={[0, gift.size / 2, 0]} rotation={[0, Math.PI / 4, 0]}>
             <mesh position={[0, 0.05, 0]}>
               <boxGeometry args={[gift.size * 0.4, 0.05, gift.size * 0.4]} />
-              <meshStandardMaterial color={gift.ribbonColor} />
+              <meshStandardMaterial
+                color={gift.ribbonColor}
+                emissive={gift.ribbonColor}
+                emissiveIntensity={0.2}
+              />
             </mesh>
             <mesh position={[0, 0.1, 0]} rotation={[0, 0, Math.PI / 4]}>
               <boxGeometry args={[gift.size * 0.15, gift.size * 0.15, gift.size * 0.15]} />
-              <meshStandardMaterial color={gift.ribbonColor} />
+              <meshStandardMaterial
+                color={gift.ribbonColor}
+                emissive={gift.ribbonColor}
+                emissiveIntensity={0.2}
+              />
             </mesh>
           </group>
         </group>
