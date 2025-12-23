@@ -5,10 +5,42 @@ import { useFrame } from '@react-three/fiber';
 import { Text, Float, RoundedBox, useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 
+const PulseWave: React.FC<{ isRead: boolean; active: boolean }> = ({ isRead, active }) => {
+  const meshRef = useRef<THREE.Mesh>(null);
+
+  useFrame((state) => {
+    if (meshRef.current && active && !isRead) {
+      const t = state.clock.elapsedTime * 1.5;
+      const wave = (t % 1); // 0 to 1
+      meshRef.current.scale.setScalar(1 + wave * 1.5);
+      if (meshRef.current.material instanceof THREE.MeshStandardMaterial) {
+        meshRef.current.material.opacity = (1 - wave) * 0.4;
+      }
+    } else if (meshRef.current) {
+      meshRef.current.scale.setScalar(0);
+    }
+  });
+
+  return (
+    <mesh ref={meshRef} position={[0, 0, -0.02]}>
+      <circleGeometry args={[0.3, 32]} />
+      <meshStandardMaterial
+        color="#f8e4a0"
+        transparent
+        opacity={0}
+        depthWrite={false}
+        blending={THREE.AdditiveBlending}
+      />
+    </mesh>
+  );
+};
+
 const TreeCard: React.FC<CardProps> = ({ wish, position, rotation, onClick, isRead }) => {
   const [hovered, setHovered] = useState(false);
   const groupRef = useRef<THREE.Group>(null);
   const materialRef = useRef<THREE.MeshStandardMaterial>(null);
+  const frameMaterialRef = useRef<THREE.MeshStandardMaterial>(null);
+  const sphereMaterialRef = useRef<THREE.MeshStandardMaterial>(null);
 
   // Load the texture for the decoration
   const texture = useTexture('/assets/christmas_assets.png');
@@ -43,20 +75,24 @@ const TreeCard: React.FC<CardProps> = ({ wish, position, rotation, onClick, isRe
         groupRef.current.quaternion.slerp(targetQuat, 0.1);
       }
     }
-    if (materialRef.current) {
+    if (materialRef.current || frameMaterialRef.current || sphereMaterialRef.current) {
+      const materials = [materialRef.current, frameMaterialRef.current, sphereMaterialRef.current].filter(Boolean);
+
       if (!hovered && !opening) {
         if (isRead) {
           // Dim and static when read
-          materialRef.current.emissiveIntensity = 0.1;
+          materials.forEach(m => m!.emissiveIntensity = 0.1);
         } else {
           // Faster and brighter blinking for unread cards
           const pulse = (Math.sin(state.clock.elapsedTime * 5) + 1) / 2;
-          materialRef.current.emissiveIntensity = 0.5 + pulse * 2.5;
+          const intensity = 0.5 + pulse * 2.5;
+          materials.forEach(m => m!.emissiveIntensity = intensity);
         }
       } else if (hovered && !opening) {
-        materialRef.current.emissiveIntensity = isRead ? 1.0 : 4.0;
+        const intensity = isRead ? 1.0 : 4.0;
+        materials.forEach(m => m!.emissiveIntensity = intensity);
       } else if (opening) {
-        materialRef.current.emissiveIntensity = 10.0; // Glow intense when flying
+        materials.forEach(m => m!.emissiveIntensity = 10.0); // Glow intense when flying
       }
     }
   });
@@ -84,6 +120,9 @@ const TreeCard: React.FC<CardProps> = ({ wish, position, rotation, onClick, isRe
           onPointerOut={() => setHovered(false)}
           className="cursor-pointer"
         >
+          {/* Wave Animation */}
+          <PulseWave isRead={isRead} active={!opening && !hovered} />
+
           {/* Card Body */}
           <group scale={hovered && !opening ? 1.2 : 1}>
             {/* Main Card */}
@@ -102,9 +141,10 @@ const TreeCard: React.FC<CardProps> = ({ wish, position, rotation, onClick, isRe
             </RoundedBox>
 
             {/* Thinner Gold Frame */}
-            <mesh position={[0, 0, 0.001]}>
+            <mesh position={[0, 0, 0]}>
               <boxGeometry args={[0.41, 0.71, 0.035]} />
               <meshStandardMaterial
+                ref={frameMaterialRef}
                 color={isRead ? "#6b5921" : "#d4af37"}
                 metalness={isRead ? 0.3 : 0.8}
                 roughness={0.2}
@@ -118,7 +158,7 @@ const TreeCard: React.FC<CardProps> = ({ wish, position, rotation, onClick, isRe
 
             {/* Recipient Text */}
             <Text
-              position={[0, -0.22, 0.03]}
+              position={[0, -0.22, 0.035]}
               fontSize={0.06}
               color={isRead ? "#8a7e5a" : "#f8e4a0"}
               font="https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/greatvibes/GreatVibes-Regular.ttf"
@@ -133,7 +173,7 @@ const TreeCard: React.FC<CardProps> = ({ wish, position, rotation, onClick, isRe
 
             {/* Merry Xmas Text */}
             <Text
-              position={[0, 0.22, 0.03]}
+              position={[0, 0.22, 0.035]}
               fontSize={0.04}
               color={isRead ? "#6b5921" : "#d4af37"}
               font="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hjp-Ek-_EeA.woff"
@@ -151,6 +191,7 @@ const TreeCard: React.FC<CardProps> = ({ wish, position, rotation, onClick, isRe
             <mesh position={[0, 0, 0.03]}>
               <sphereGeometry args={[0.04, 32, 32]} />
               <meshStandardMaterial
+                ref={sphereMaterialRef}
                 color={isRead ? "#6b5921" : "#d4af37"}
                 metalness={isRead ? 0.4 : 1}
                 roughness={0}
