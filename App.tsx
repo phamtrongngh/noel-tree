@@ -8,7 +8,7 @@ import WoodenHouse from './components/WoodenHouse';
 import WishModal from './components/WishModal';
 import AudioPlayer from './components/AudioPlayer';
 import { ChristmasWish } from './types';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Undo, Redo } from 'lucide-react';
 import ChristmasTrain from './components/ChristmasTrain';
 
 const App: React.FC = () => {
@@ -35,14 +35,14 @@ const App: React.FC = () => {
       {/* Rotation Guides - Sides */}
       <div className="absolute inset-y-0 left-4 flex items-center z-40 pointer-events-none">
         <div className="flex flex-col items-center gap-2 animate-pulse">
-          <ChevronLeft className="w-8 h-8 text-blue-100/30" />
-          <span className="text-[10px] text-blue-100/20 uppercase tracking-[0.2em] [writing-mode:vertical-lr] rotate-180">Rotate</span>
+          <Undo className="w-8 h-8 text-blue-100/30" />
+          <span className="text-[10px] text-blue-100/20 uppercase tracking-[0.2em] [writing-mode:vertical-lr] rotate-180">Xoay Trái</span>
         </div>
       </div>
       <div className="absolute inset-y-0 right-4 flex items-center z-40 pointer-events-none">
         <div className="flex flex-col items-center gap-2 animate-pulse">
-          <ChevronRight className="w-8 h-8 text-blue-100/30" />
-          <span className="text-[10px] text-blue-100/20 uppercase tracking-[0.2em] [writing-mode:vertical-lr]">Rotate</span>
+          <Redo className="w-8 h-8 text-blue-100/30" />
+          <span className="text-[10px] text-blue-100/20 uppercase tracking-[0.2em] [writing-mode:vertical-lr]">Xoay Phải</span>
         </div>
       </div>
 
