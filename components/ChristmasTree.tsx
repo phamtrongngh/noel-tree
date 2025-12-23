@@ -14,62 +14,67 @@ const ChristmasTree: React.FC<ChristmasTreeProps> = ({ onCardClick }) => {
   // --- Procedural Branch Generation ---
   const branchesData = useMemo(() => {
     const data = [];
-    const layers = 18; 
-    
+    const layers = 15; // Reduced from 18 to clean up base
+
     for (let i = 0; i < layers; i++) {
-      const t = i / layers; 
-      const y = 3.5 - (i * 0.5); 
-      const radius = 0.2 + (t * 2.8); 
-      const branchCount = 7 + Math.floor(t * 18); 
+      const t = i / layers;
+      const y = 3.2 - (i * 0.45); // Adjusted scale to stop higher up (approx -3.5 bottom)
+      const radius = 0.2 + (t * 2.5);
+      const branchCount = 6 + Math.floor(t * 14);
       const angleStep = (Math.PI * 2) / branchCount;
 
       for (let j = 0; j < branchCount; j++) {
-        const angle = j * angleStep + (i % 2) * (angleStep / 2); 
-        const rOffset = (Math.random() - 0.5) * 0.3;
-        const yOffset = (Math.random() - 0.5) * 0.2;
-        
+        const angle = j * angleStep + (i % 2) * (angleStep / 2);
+        const rOffset = (Math.random() - 0.5) * 0.2;
+
         const x = Math.cos(angle) * (radius + rOffset);
         const z = Math.sin(angle) * (radius + rOffset);
-        
-        const rotX = 0.5 + t * 0.6; 
-        const rotY = -angle + Math.PI / 2;
-        
-        const scale = 0.7 + t * 0.9;
 
-        data.push({ position: [x, y + yOffset, z], rotation: [rotX, rotY, 0], scale });
+        const rotX = 0.5 + t * 0.6;
+        const rotY = -angle + Math.PI / 2;
+
+        const scale = 0.6 + t * 0.8;
+
+        data.push({ position: [x, y, z], rotation: [rotX, rotY, 0], scale });
       }
     }
     return data;
   }, []);
 
-  // --- Ornaments (Baubles) - Now Glowing! ---
+  // --- Ornaments (Baubles) - Anchored to tree surface ---
   const ornaments = useMemo(() => {
     const list = [];
-    const count = 75;
+    const count = 70; // Slightly more for better coverage
     for (let i = 0; i < count; i++) {
-      const height = (Math.random() * 5.5) - 2; 
-      const maxR = (3.5 - height) * 0.65; 
-      if (maxR < 0) continue;
-      
+      const height = (Math.random() * 5.2) - 2.2;
+      const t = (3.2 - height) / 6.5;
+      const treeR = 0.2 + (t * 2.5);
+
       const angle = Math.random() * Math.PI * 2;
-      const r = maxR * (0.7 + Math.random() * 0.3); 
+      // Bring them further out to the surface (1.05 to 1.2 of radius)
+      const r = treeR * (1.05 + Math.random() * 0.15);
 
       list.push({
         position: [Math.cos(angle) * r, height, Math.sin(angle) * r] as [number, number, number],
         color: COLORS.lights[Math.floor(Math.random() * COLORS.lights.length)],
-        scale: 0.12 + Math.random() * 0.08
+        scale: 0.11 + Math.random() * 0.07,
+        angle // Store angle to orient the string
       });
     }
     return list;
   }, []);
 
-  // --- Cards Placement ---
+  // --- Cards Placement - On the surface ---
   const cardPlacements = useMemo(() => {
     return WISHES.map((wish, i) => {
       const t = i / WISHES.length;
-      const angle = t * Math.PI * 2 * 2.5; 
-      const height = 2.2 - (t * 4); 
-      const radius = (3.9 - height) * 0.6; 
+      const angle = t * Math.PI * 2 * 2.5;
+      const height = 1.9 - (t * 3.8);
+
+      const t_height = (3.2 - height) / 6.5;
+      const treeR = 0.2 + (t_height * 2.5);
+      // Bring cards further out (1.4 of radius)
+      const radius = treeR * 1.4;
 
       return {
         wish,
@@ -86,19 +91,19 @@ const ChristmasTree: React.FC<ChristmasTreeProps> = ({ onCardClick }) => {
   return (
     <group position={[0, -1, 0]}>
       {/* --- The Tree Trunk --- */}
-      <mesh position={[0, 0, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[0.2, 0.5, 7, 10]} />
+      <mesh position={[0, -0.5, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[0.2, 0.5, 6, 10]} />
         <meshStandardMaterial color={COLORS.trunk} roughness={0.9} />
       </mesh>
 
       {/* --- The Foliage --- */}
-      <Instances range={1200}>
+      <Instances range={1000}>
         <coneGeometry args={[0.3, 1.2, 7]} />
-        <meshStandardMaterial 
-            color={COLORS.tree} 
-            roughness={0.6}
-            metalness={0.1}
-            flatShading
+        <meshStandardMaterial
+          color={COLORS.tree}
+          roughness={0.6}
+          metalness={0.1}
+          flatShading
         />
         {branchesData.map((data, i) => (
           <Instance
@@ -112,76 +117,85 @@ const ChristmasTree: React.FC<ChristmasTreeProps> = ({ onCardClick }) => {
 
       {/* --- The Pot --- */}
       <group position={[0, -3.5, 0]}>
-         <Cylinder args={[0.65, 0.55, 1, 32]} castShadow receiveShadow>
-             <meshStandardMaterial color="#2c3e50" roughness={0.3} metalness={0.4} />
-         </Cylinder>
-         <Cylinder args={[0.75, 0.75, 0.1, 32]} position={[0, 0.5, 0]}>
-             <meshStandardMaterial color="#1a1a1a" roughness={0.2} metalness={0.6} />
-         </Cylinder>
+        <Cylinder args={[0.65, 0.55, 1, 32]} castShadow receiveShadow>
+          <meshStandardMaterial color="#2c3e50" roughness={0.3} metalness={0.4} />
+        </Cylinder>
+        <Cylinder args={[0.75, 0.75, 0.1, 32]} position={[0, 0.5, 0]}>
+          <meshStandardMaterial color="#1a1a1a" roughness={0.2} metalness={0.6} />
+        </Cylinder>
       </group>
 
       {/* --- Glowing Ornaments --- */}
       {ornaments.map((orn, i) => (
-        <mesh key={`orn-${i}`} position={orn.position}>
-          <sphereGeometry args={[orn.scale, 32, 32]} />
-          <meshStandardMaterial 
-            color={orn.color} 
-            metalness={0.5} 
-            roughness={0.2} 
-            emissive={orn.color}
-            emissiveIntensity={2.5} // Makes them glow with Bloom
-            toneMapped={false}
-          />
-          {/* Add a tiny point light to some ornaments for realistic lighting */}
-          {i % 5 === 0 && (
-             <pointLight distance={1.5} intensity={5} color={orn.color} decay={2} />
-          )}
-        </mesh>
+        <group key={`orn-${i}`} position={orn.position}>
+          {/* String tilted back into the tree foliage */}
+          <group rotation={[0, -orn.angle + Math.PI / 2, 0]}>
+            <mesh position={[0, 0.15, -0.1]} rotation={[0.4, 0, 0]}>
+              <cylinderGeometry args={[0.005, 0.005, 0.4]} />
+              <meshBasicMaterial color="#aaa" />
+            </mesh>
+          </group>
+          <mesh position={[0, 0, 0]}>
+            <sphereGeometry args={[orn.scale, 32, 32]} />
+            <meshStandardMaterial
+              color={orn.color}
+              metalness={0.5}
+              roughness={0.2}
+              emissive={orn.color}
+              emissiveIntensity={2.0}
+              toneMapped={false}
+            />
+            {/* Add a tiny point light to some ornaments for realistic lighting */}
+            {i % 4 === 0 && (
+              <pointLight distance={1.2} intensity={4} color={orn.color} decay={2} />
+            )}
+          </mesh>
+        </group>
       ))}
 
       {/* --- The Magical Star --- */}
       <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
         <group position={[0, 3.8, 0]}>
-            <mesh>
-                <octahedronGeometry args={[0.45, 0]} />
-                {/* High emissive intensity triggers the Bloom effect */}
-                <meshStandardMaterial 
-                  color="#ffd700" 
-                  emissive="#ffd700" 
-                  emissiveIntensity={10} 
-                  toneMapped={false} 
-                />
-            </mesh>
-            <pointLight intensity={15} distance={8} color="#ffd700" decay={2} />
-            
-            {/* Halo Rings */}
-            <mesh rotation={[Math.PI / 2, 0, 0]}>
-               <ringGeometry args={[0.6, 0.65, 32]} />
-               <meshBasicMaterial color="#ffecb3" transparent opacity={0.5} side={THREE.DoubleSide} />
-            </mesh>
-            
-            <Sparkles count={40} scale={2} size={8} speed={0.8} opacity={1} color="#ffffaa" />
+          <mesh>
+            <octahedronGeometry args={[0.45, 0]} />
+            {/* High emissive intensity triggers the Bloom effect */}
+            <meshStandardMaterial
+              color="#ffd700"
+              emissive="#ffd700"
+              emissiveIntensity={10}
+              toneMapped={false}
+            />
+          </mesh>
+          <pointLight intensity={15} distance={8} color="#ffd700" decay={2} />
+
+          {/* Halo Rings */}
+          <mesh rotation={[Math.PI / 2, 0, 0]}>
+            <ringGeometry args={[0.6, 0.65, 32]} />
+            <meshBasicMaterial color="#ffecb3" transparent opacity={0.5} side={THREE.DoubleSide} />
+          </mesh>
+
+          <Sparkles count={40} scale={2} size={8} speed={0.8} opacity={1} color="#ffffaa" />
         </group>
       </Float>
 
       {/* --- Cards --- */}
       {cardPlacements.map((card, i) => (
-        <TreeCard 
-          key={`card-${i}`} 
-          wish={card.wish} 
-          position={card.position} 
+        <TreeCard
+          key={`card-${i}`}
+          wish={card.wish}
+          position={card.position}
           rotation={card.rotation}
           onClick={onCardClick}
         />
       ))}
 
       {/* --- Fairy Lights (Sparkles) --- */}
-      <Sparkles 
-        count={300} 
-        scale={[6, 8, 6]} 
-        size={5} 
-        speed={0.4} 
-        opacity={0.8} 
+      <Sparkles
+        count={300}
+        scale={[6, 8, 6]}
+        size={5}
+        speed={0.4}
+        opacity={0.8}
         color="#ffeaa7" // Warm white glow
       />
     </group>

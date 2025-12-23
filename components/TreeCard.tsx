@@ -38,9 +38,9 @@ const TreeCard: React.FC<CardProps> = ({ wish, position, rotation, onClick }) =>
           onPointerOver={() => setHovered(true)}
           onPointerOut={() => setHovered(false)}
         >
-          {/* String */}
-          <mesh position={[0, 0.45, 0]}>
-            <cylinderGeometry args={[0.002, 0.002, 0.3]} />
+          {/* String - Tilted back to look attached */}
+          <mesh position={[0, 0.55, -0.2]} rotation={[0.4, 0, 0]}>
+            <cylinderGeometry args={[0.002, 0.002, 0.6]} />
             <meshStandardMaterial color="#ecf0f1" />
           </mesh>
 
