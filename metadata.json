@@ -1,0 +1,7 @@
+{
+  "name": "Cây Thông Noel 3D Kỳ Diệu",
+  "description": "Trải nghiệm không gian Giáng sinh 3D tương tác với cây thông rực rỡ, những lời chúc ấm áp và tuyết rơi huyền ảo.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
