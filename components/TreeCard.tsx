@@ -42,11 +42,11 @@ const TreeCard: React.FC<CardProps> = ({ wish, position, rotation, onClick, isRe
   const frameMaterialRef = useRef<THREE.MeshStandardMaterial>(null);
   const sphereMaterialRef = useRef<THREE.MeshStandardMaterial>(null);
 
-  // Load the texture for the decoration
-  const texture = useTexture('/assets/christmas_assets.png');
-  // We want to slice it. Since we can't easily slice a single texture onto a mesh without UV mapping, 
-  // we'll just use the whole texture or a simple colored version if it's too complex.
-  // actually, let's just use nice colors and a gold emblem.
+  // // Load the texture for the decoration
+  // const texture = useTexture('assets/christmas_assets.png');
+  // // We want to slice it. Since we can't easily slice a single texture onto a mesh without UV mapping, 
+  // // we'll just use the whole texture or a simple colored version if it's too complex.
+  // // actually, let's just use nice colors and a gold emblem.
 
   const [opening, setOpening] = useState(false);
 

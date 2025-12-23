@@ -25,7 +25,7 @@ const WishModal: React.FC<WishModalProps> = ({ wish, onClose }) => {
         {/* Illustrations from assets (assuming 2x2 grid) */}
         <div className="absolute top-4 left-4 w-20 h-20 overflow-hidden rounded-full border-2 border-white/20 shadow-lg group-hover:scale-110 transition-transform duration-500">
           <img
-            src="/assets/christmas_assets.png"
+            src="assets/christmas_assets.png"
             className="w-[200%] max-w-none absolute"
             style={{ left: '0%', top: '0%' }}
           />
@@ -33,7 +33,7 @@ const WishModal: React.FC<WishModalProps> = ({ wish, onClose }) => {
 
         <div className="absolute top-4 right-4 w-20 h-20 overflow-hidden rounded-full border-2 border-white/20 shadow-lg group-hover:scale-110 transition-transform duration-500">
           <img
-            src="/assets/christmas_assets.png"
+            src="assets/christmas_assets.png"
             className="w-[200%] max-w-none absolute"
             style={{ left: '-100%', top: '0%' }}
           />
@@ -41,7 +41,7 @@ const WishModal: React.FC<WishModalProps> = ({ wish, onClose }) => {
 
         <div className="absolute bottom-4 left-4 w-20 h-20 overflow-hidden rounded-full border-2 border-white/20 shadow-lg group-hover:scale-110 transition-transform duration-500">
           <img
-            src="/assets/christmas_assets.png"
+            src="assets/christmas_assets.png"
             className="w-[200%] max-w-none absolute"
             style={{ left: '0%', top: '-100%' }}
           />
@@ -49,7 +49,7 @@ const WishModal: React.FC<WishModalProps> = ({ wish, onClose }) => {
 
         <div className="absolute bottom-4 right-4 w-20 h-20 overflow-hidden rounded-full border-2 border-white/20 shadow-lg group-hover:scale-110 transition-transform duration-500">
           <img
-            src="/assets/christmas_assets.png"
+            src="assets/christmas_assets.png"
             className="w-[200%] max-w-none absolute"
             style={{ left: '-100%', top: '-100%' }}
           />
