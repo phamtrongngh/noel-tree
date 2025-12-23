@@ -71,7 +71,7 @@ const WishModal: React.FC<WishModalProps> = ({ wish, onClose }) => {
           </div>
 
           <div className="text-center mb-10">
-            <p className="text-[#d4af37] font-medium tracking-wide mb-1 opacity-70">Thân gửi đến</p>
+            <p className="text-[#d4af37] font-medium tracking-wide mb-1 opacity-70">Gửi</p>
             <h3 className="text-3xl font-christmas text-[#f8e4a0]">{wish.to}</h3>
           </div>
 

@@ -9,6 +9,7 @@ import WishModal from './components/WishModal';
 import AudioPlayer from './components/AudioPlayer';
 import { ChristmasWish } from './types';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import ChristmasTrain from './components/ChristmasTrain';
 
 const App: React.FC = () => {
   const [selectedWish, setSelectedWish] = useState<ChristmasWish | null>(null);
@@ -101,7 +102,7 @@ const App: React.FC = () => {
             <ChristmasTree onCardClick={handleCardClick} readWishIds={readWishIds} />
 
             {/* Wooden House behind the tree */}
-            <WoodenHouse position={[0, -4.0, -9]} />
+            <WoodenHouse position={[0, -4.0, -11]} />
 
             {/* Snowy Plane Ground */}
             <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -4.0, 0]} receiveShadow>
@@ -112,6 +113,11 @@ const App: React.FC = () => {
                 metalness={0.1}
               />
             </mesh>
+
+            {/* Christmas Train - Starts at Front (z=R) */}
+            <group position={[0, -4.0, 0]} rotation={[0, -Math.PI / 2, 0]}>
+              <ChristmasTrain radius={7} />
+            </group>
 
             <Snowfall />
           </group>

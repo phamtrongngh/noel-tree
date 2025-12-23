@@ -1,7 +1,6 @@
 
 export interface ChristmasWish {
   id: number;
-  from: string;
   to: string;
   message: string;
   color: string;
